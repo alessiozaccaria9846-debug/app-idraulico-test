@@ -15,7 +15,7 @@ with st.form("preventivo_form"):
 
 if submit:
     prezzo_ora = 40
-    imponibile = (ore * prezzo_ora) + materials
+    imponibile = (ore * prezzo_ora) + materiali
     iva = imponibile * 0.22
     totale = imponibile + iva
     
