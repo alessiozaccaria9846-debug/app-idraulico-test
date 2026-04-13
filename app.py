@@ -1,6 +1,5 @@
 import streamlit as st
 from fpdf import FPDF
-import base64
 
 st.set_page_config(page_title="Idraulica Rossi AI", page_icon="🔧")
 
@@ -21,7 +20,7 @@ if submit:
     
     st.success(f"### Totale Ivato: Euro {totale:.2f}")
 
-    # Creazione PDF (usiamo 'latin-1' per evitare errori di simboli)
+    # Creazione PDF
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", "B", 16)
@@ -32,22 +31,23 @@ if submit:
     pdf.cell(200, 10, txt=f"Cliente: {cliente}", ln=True)
     pdf.cell(200, 10, txt=f"Intervento: {tipo}", ln=True)
     pdf.ln(5)
-    # Abbiamo tolto il simbolo € che rompeva il codice
     pdf.cell(200, 10, txt=f"Ore lavoro: {ore} (Tariffa: Euro {prezzo_ora}/ora)", ln=True)
     pdf.cell(200, 10, txt=f"Costo Materiali: Euro {materiali:.2f}", ln=True)
     pdf.cell(200, 10, txt=f"IVA (22%): Euro {iva:.2f}", ln=True)
     pdf.set_font("Arial", "B", 14)
     pdf.cell(200, 10, txt=f"TOTALE FINALE: Euro {totale:.2f}", ln=True)
 
-    # Output del PDF sicuro
-    pdf_bytes = pdf.output() # Ritorna byte string di default nelle versioni recenti
-    
-    # Bottone di scaricamento integrato in Streamlit (più moderno)
+    # TRUCCO PER RISOLVERE L'ERRORE: Trasformiamo il PDF in byte puri
+    pdf_bytes = pdf.output()
+    if isinstance(pdf_bytes, str): # Gestione versioni diverse della libreria
+        pdf_bytes = pdf_bytes.encode('latin-1')
+
+    # Bottone di scaricamento
     st.download_button(
         label="📥 Scarica il Preventivo PDF",
-        data=pdf_bytes,
-        file_name=f"preventivo_{cliente}.pdf",
+        data=bytes(pdf_bytes), # Lo forziamo in formato 'bytes'
+        file_name=f"preventivo_{cliente.replace(' ', '_')}.pdf",
         mime="application/pdf"
     )
     
-    st.info("Dopo aver scaricato il PDF, puoi inviarlo direttamente al cliente via WhatsApp o Email.")
+    st.info("Tocca il tasto sopra per scaricare il file sul telefono.")
