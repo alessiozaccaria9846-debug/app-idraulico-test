@@ -7,16 +7,27 @@ st.set_page_config(page_title="Gestionale Artigiani", page_icon="🔧", layout="
 # 2. CSS AGGIORNATO: Questo toglie TUTTO (barra in alto, footer, e pulsanti di gestione)
 hide_st_style = """
             <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            /* Nasconde il pulsante rosso "Deploy" e la toolbar di amministrazione */
-            .stAppDeployButton {display:none;}
-            .st-emotion-cache-18ni7ve {display: none;}
-            [data-testid="stToolbar"] {visibility: hidden !important;}
-            [data-testid="stDecoration"] {display: none;}
-            /* Toglie lo spazio bianco in alto che resta dopo aver tolto l'header */
-            .block-container {padding-top: 1rem;}
+            /* Nasconde l'header e il footer */
+            header {visibility: hidden !important;}
+            footer {visibility: hidden !important;}
+            
+            /* Rimuove il pulsante "Deploy" in alto a destra */
+            .stAppDeployButton {display: none !important;}
+            
+            /* Rimuove la toolbar di Streamlit (i 3 puntini, ecc.) */
+            [data-testid="stToolbar"] {display: none !important;}
+            
+            /* Rimuove il badge "Made with Streamlit" in basso a destra (il watermark) */
+            #viewerBadge {display: none !important;}
+            
+            /* Rimuove la decorazione colorata in alto */
+            [data-testid="stDecoration"] {display: none !important;}
+
+            /* Nasconde lo stato di caricamento in alto a destra */
+            [data-testid="stStatusWidget"] {display: none !important;}
+            
+            /* Opzionale: toglie lo spazio vuoto lasciato dall'header */
+            .main .block-container {padding-top: 0rem !important;}
             </style>
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
